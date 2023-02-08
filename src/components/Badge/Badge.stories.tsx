@@ -15,3 +15,8 @@ export default {
 const Template: ComponentStory<typeof Badge> = (args) => <Badge {...args} />
 
 export const Default = Template.bind({})
+
+export const DarkTheme = Template.bind({})
+DarkTheme.parameters = {
+  theme: 'dark',
+}
