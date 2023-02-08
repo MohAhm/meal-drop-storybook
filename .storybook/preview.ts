@@ -1,3 +1,4 @@
+import { globalDecorators } from './decorators';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
 
 import { viewports as breakpoints } from '../src/styles/breakpoints'
@@ -31,3 +32,5 @@ export const parameters = {
     },
   },
 }
+
+export const decorators = globalDecorators
