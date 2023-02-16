@@ -1,13 +1,20 @@
-import React from 'react'
 import { DecoratorFn } from '@storybook/react'
-import { withDesign } from 'storybook-addon-designs'
+import { initialize, mswDecorator } from 'msw-storybook-addon'
+import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
+import { withDesign } from 'storybook-addon-designs'
 import { ThemeProvider } from 'styled-components'
 import { GlobalStyle } from '../src/styles/GlobalStyle'
 import { darkTheme, lightTheme } from '../src/styles/theme'
 
+initialize()
+
 const withRouter: DecoratorFn = (StoryFn) => {
-  return <Router><StoryFn /></Router>
+  return (
+    <Router>
+      <StoryFn />
+    </Router>
+  )
 }
 
 const withTheme: DecoratorFn = (StoryFn, context) => {
@@ -15,14 +22,11 @@ const withTheme: DecoratorFn = (StoryFn, context) => {
   const storyTheme = theme === 'dark' ? darkTheme : lightTheme
 
   return (
-  <ThemeProvider theme={storyTheme}>
-    <GlobalStyle />
-    <StoryFn />
-  </ThemeProvider>
-)}
+    <ThemeProvider theme={storyTheme}>
+      <GlobalStyle />
+      <StoryFn />
+    </ThemeProvider>
+  )
+}
 
-export const globalDecorators = [
-  withTheme,
-  withDesign,
-  withRouter
-]
+export const globalDecorators = [withTheme, withDesign, withRouter, mswDecorator]
