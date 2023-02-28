@@ -3,7 +3,7 @@ import { DecoratorFn } from '@storybook/react'
 import { initialize, mswDecorator } from 'msw-storybook-addon'
 import React from 'react'
 import { Provider as StoreProvider } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom'
 import { withDesign } from 'storybook-addon-designs'
 import { ThemeProvider } from 'styled-components'
 
@@ -13,11 +13,25 @@ import { darkTheme, lightTheme } from '../src/styles/theme'
 
 initialize()
 
-const withRouter: DecoratorFn = (StoryFn) => {
+const withRouter: DecoratorFn = (StoryFn, { parameters: { deeplink } }) => {
+  // path = '/restaurant/:id'
+  // route = '/restaurant/12'
+
+  if (!deeplink) {
+    return (
+      <BrowserRouter>
+        <StoryFn />
+      </BrowserRouter>
+    )
+  }
+
+  const { path, route } = deeplink
   return (
-    <Router>
-      <StoryFn />
-    </Router>
+    <MemoryRouter initialEntries={[encodeURI(route)]}>
+      <Routes>
+        <Route path={path} element={<StoryFn />} />
+      </Routes>
+    </MemoryRouter>
   )
 }
 
